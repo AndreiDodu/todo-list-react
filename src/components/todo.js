@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from 'react-dom';
 
 class Todo extends Component {
 
@@ -18,7 +17,7 @@ class Todo extends Component {
     }
 
     handleDisableOthersEditMode = event => {
-        if (this.props.item._id != event.detail.id) {
+        if (this.props.item._id !== event.detail.id) {
             this.setState({ isEditMode: false });
         }
     };
@@ -45,6 +44,12 @@ class Todo extends Component {
         this.setState({ value: e.target.value });
     };
 
+    handleOnKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            this.update();
+        }
+    }
+
 
     remove = () => {
         this.props.remove(this.props.item);
@@ -62,7 +67,9 @@ class Todo extends Component {
                         </div></div>
                 </div>
                 <div className="card-body text-secondary">
-                    {this.state.isEditMode ? (<input type={'text'} ref={this.state.valueRef} value={this.state.value} onChange={this.onChangeValue} />) : <h5 className="card-title">{this.props.item.value}</h5>}
+                    {this.state.isEditMode ?
+                        (<input type={'text'} ref={this.state.valueRef} value={this.state.value} onKeyPress={this.handleOnKeyPress} onChange={this.onChangeValue} />)
+                        : <h5 className="card-title">{this.props.item.value}</h5>}
                     <p className="card-text">{this.props.item.data}</p>
                 </div>
             </div>
