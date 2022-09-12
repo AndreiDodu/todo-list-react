@@ -5,13 +5,15 @@ import Todo from './components/todo';
 import InsertForm from './components/insertForm';
 import Preview from './components/preview';
 import * as TodoService from './service/todoService';
+import Filter from './components/filter';
+
 
 class App extends Component {
 
 
   constructor(props) {
     super(props);
-    this.state = { items: [], preview: { value: '', data: new Date().toISOString() }, creationDate: new Date().toISOString() };
+    this.state = { items: [], filtered: [], preview: { value: '', data: new Date().toISOString() }, creationDate: new Date().toISOString() };
   }
 
   insert = (value) => {
@@ -33,6 +35,10 @@ class App extends Component {
     });
   };
 
+  filter = (value) => {
+    this.setState({ filtered: this.state.items.filter(data => data.value.indexOf(value) > -1) });
+  };
+
   valueChanged = (value) => {
     this.setState({ preview: { value, data: new Date().toISOString() } });
   };
@@ -40,7 +46,7 @@ class App extends Component {
 
   componentDidMount() {
     TodoService.getAll().then(lst => {
-      this.setState({ items: [...lst] });
+      this.setState({ items: [...lst] , filtered: [...lst]});
     });
   }
 
@@ -56,9 +62,10 @@ class App extends Component {
             <div className='my-2'><Preview item={this.state.preview} /></div>
           </div>
           <div className="col-md-7 col-lg-8">
-            {!!this.state.items.length && this.state.items.map((item, idx) => (<Todo key={idx} disableOthersEditMode={this.disableOthersEditMode} item={item} update={this.update} remove={this.remove} />))}
+            <Filter filter={this.filter} />
+            {!!this.state.filtered.length && this.state.filtered.map((item, idx) => (<Todo key={idx} disableOthersEditMode={this.disableOthersEditMode} item={item} update={this.update} remove={this.remove} />))}
 
-            {!!!this.state.items.length && (
+            {!!!this.state.filtered.length && (
 
               <div className="card border-secondary mb-3">
                 <div className="card-header">

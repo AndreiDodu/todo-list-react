@@ -32,7 +32,7 @@ class InsertForm extends Component {
     render() {
         return (<form className='form-group'>
             <div><label>TODO</label></div>
-            <div><input type={'text'} ref={this.state.inputRef} value={this.state.value} className='form-control my-2' onChange={this.onChangeValue} /></div>
+            <div><input type={'text'} placeholder="TODO" ref={this.state.inputRef} value={this.state.value} className='form-control my-2' onChange={this.onChangeValue} /></div>
             <div><button type='submit' className='btn btn-success w-100' onClick={this.insert}>Save</button></div>
         </form>);
     }
