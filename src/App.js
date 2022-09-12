@@ -1,4 +1,3 @@
-import './App.css';
 import React, { Component } from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Todo from './components/todo';
@@ -18,20 +17,23 @@ class App extends Component {
 
   insert = (value) => {
     TodoService.save({ value, data: new Date() }).then(saved => {
-      this.setState({ items: [...this.state.items, saved] });
+      const newList = [...this.state.items, saved];
+      this.setState({ items: newList, filtered: [...newList] });
     });
   };
 
   remove = (item) => {
     TodoService.deleteItem(item._id).then(deleted => {
-      this.setState({ items: this.state.items.filter(todo => todo._id !== item._id) });
+      const newList = this.state.items.filter(todo => todo._id !== item._id);
+      this.setState({ items: newList, filtered: [...newList]  });
     });
   };
 
   update = (item) => {
     console.log('item', item);
     TodoService.update(item._id, item).then(data => {
-      this.setState({ items: this.state.items.map(data => data._id !== item._id ? data : item) });
+      const newList = this.state.items.map(data => data._id !== item._id ? data : item);
+      this.setState({ items: newList , filtered: [...newList]});
     });
   };
 
@@ -46,7 +48,7 @@ class App extends Component {
 
   componentDidMount() {
     TodoService.getAll().then(lst => {
-      this.setState({ items: [...lst] , filtered: [...lst]});
+      this.setState({ items: [...lst], filtered: [...lst] });
     });
   }
 
