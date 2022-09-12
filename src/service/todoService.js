@@ -26,7 +26,7 @@ export const update = (id, data) => {
         headers: {
             "content-type": "application/json"
         },
-        body: JSON.stringify()
+        body: JSON.stringify(data)
     }).then(res => res.json());
 };
 

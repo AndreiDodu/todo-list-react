@@ -26,6 +26,13 @@ class App extends Component {
     });
   };
 
+  update = (item) => {
+    console.log('item', item);
+    TodoService.update(item._id, item).then(data => {
+      this.setState({ items: this.state.items.map(data => data._id !== item._id ? data : item) });
+    });
+  };
+
   valueChanged = (value) => {
     this.setState({ preview: { value, data: new Date().toISOString() } });
   };
@@ -49,7 +56,7 @@ class App extends Component {
             <div className='my-2'><Preview item={this.state.preview} /></div>
           </div>
           <div className="col-md-7 col-lg-8">
-            {!!this.state.items.length && this.state.items.map((item, idx) => (<Todo key={idx} item={item} remove={this.remove} />))}
+            {!!this.state.items.length && this.state.items.map((item, idx) => (<Todo key={idx} disableOthersEditMode={this.disableOthersEditMode} item={item} update={this.update} remove={this.remove} />))}
 
             {!!!this.state.items.length && (
 

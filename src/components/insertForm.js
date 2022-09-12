@@ -11,6 +11,12 @@ class InsertForm extends Component {
     onChangeValue = (e) => {
         this.setState({ value: e.target.value });
         this.props.valueChanged(e.target.value);
+
+
+        const myEvent = new CustomEvent("disable-todo-edit-mode", {
+            detail: { id: '-1' }
+        });
+        document.body.dispatchEvent(myEvent);
     };
 
     insert = (e) => {
