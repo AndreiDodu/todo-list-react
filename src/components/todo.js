@@ -1,87 +1,109 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import Todo from './todoItem';
+import InsertForm from './insertForm';
+import Preview from './preview';
+import * as TodoService from '../service/todoService';
+import Filter from './filter';
 
-class Todo extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = { isEditMode: false, value: this.props.item.value, valueRef: React.createRef() };
-    }
-
-
-    componentDidMount() {
-        document.body.addEventListener("disable-todo-edit-mode", this.handleDisableOthersEditMode);
-    }
-
-    componentWillUnmount() {
-        document.body.removeEventListener("disable-todo-edit-mode", this.handleDisableOthersEditMode);
-    }
-
-    handleDisableOthersEditMode = event => {
-        if (this.props.item._id !== event.detail.id) {
-            this.setState({ isEditMode: false });
-        }
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      filtered: [],
+      preview: { value: '', data: new Date().toISOString() },
+      creationDate: new Date().toISOString(),
     };
+  }
 
+  insert = (value) => {
+    TodoService.save({ value, data: new Date() }).then((saved) => {
+      const newList = [...this.state.items, saved];
+      this.setState({ items: newList, filtered: [...newList] });
+    });
+  };
 
-    update = () => {
-        this.setState({ isEditMode: !this.state.isEditMode });
+  remove = (item) => {
+    TodoService.deleteItem(item._id).then((deleted) => {
+      const newList = this.state.items.filter((todo) => todo._id !== item._id);
+      this.setState({ items: newList, filtered: [...newList] });
+    });
+  };
 
-        this.disableOthersEditMode(this.props.item);
-        if (this.state.isEditMode) {
-            this.props.update({ ...this.props.item, value: this.state.value });
-        }
-    };
+  update = (item) => {
+    console.log('item', item);
+    TodoService.update(item._id, item).then((data) => {
+      const newList = this.state.items.map((data) =>
+        data._id !== item._id ? data : item
+      );
+      this.setState({ items: newList, filtered: [...newList] });
+    });
+  };
 
+  filter = (value) => {
+    this.setState({
+      filtered: this.state.items.filter(
+        (data) => data.value.indexOf(value) > -1
+      ),
+    });
+  };
 
-    disableOthersEditMode = (item) => {
-        const myEvent = new CustomEvent("disable-todo-edit-mode", {
-            detail: { id: item._id }
-        });
-        document.body.dispatchEvent(myEvent);
-    }
+  valueChanged = (value) => {
+    this.setState({ preview: { value, data: new Date().toISOString() } });
+  };
 
-    onChangeValue = (e) => {
-        this.setState({ value: e.target.value });
-    };
+  componentDidMount() {
+    TodoService.getAll().then((lst) => {
+      this.setState({ items: [...lst], filtered: [...lst] });
+    });
+  }
 
-    handleOnKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            this.update();
-        }
-    }
+  render() {
+    return (
+      <div className="container">
+        <div className="py-5 text-center">
+          <h1>TODO List</h1>
+        </div>
+        <div className="row g-5">
+          <div className="col-md-5 col-lg-4 order-md-last">
+            <InsertForm insert={this.insert} valueChanged={this.valueChanged} />
+            <div className="my-2">
+              <Preview item={this.state.preview} />
+            </div>
+          </div>
+          <div className="col-md-7 col-lg-8">
+            <Filter filter={this.filter} />
+            {!!this.state.filtered.length &&
+              this.state.filtered.map((item, idx) => (
+                <Todo
+                  key={idx}
+                  disableOthersEditMode={this.disableOthersEditMode}
+                  item={item}
+                  update={this.update}
+                  remove={this.remove}
+                />
+              ))}
 
-
-    remove = () => {
-        this.props.remove(this.props.item);
-    };
-
-    render() {
-        return (
-            <div className="card border-secondary mb-3">
+            {!!!this.state.filtered.length && (
+              <div className="card border-secondary mb-3">
                 <div className="card-header">
-                    <div className="d-flex justify-content-between">
-                        <div>Item</div>
-                        <div>
-                            <div className="btn btn-primary mx-1" onClick={this.update}>{this.state.isEditMode ? 'Save' : 'Edit'}</div>
-                            <div className="btn btn-danger mx-1" onClick={this.remove}>X</div>
-                        </div></div>
+                  <div className="d-flex justify-content-between">
+                    <div>No data</div>
+                    <div></div>
+                  </div>
                 </div>
                 <div className="card-body text-secondary">
-                    {this.state.isEditMode ?
-                        (<input type={'text'} ref={this.state.valueRef} value={this.state.value} onKeyPress={this.handleOnKeyPress} onChange={this.onChangeValue} />)
-                        : <h5 className="card-title">{this.props.item.value}</h5>}
-                    <p className="card-text">{this.props.item.data}</p>
+                  <h5 className="card-title">No data found</h5>
+                  <p className="card-text">{this.state.creationDate}</p>
                 </div>
-            </div>
-        );
-    }
-
-    componentDidUpdate() {
-        if (this.state.isEditMode) {
-            this.state.valueRef.current.focus();
-        }
-    }
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-
-export default Todo;
+export default App;
