@@ -22,6 +22,12 @@ function App() {
     setUser({});
   }
 
+  function registerAndLogin(regForm) {
+    // register
+    // login
+    setUser({ username: regForm.username });
+  }
+
   return (
     <BrowserRouter>
       <MainMenu user={user} isLoggedIn={isLoggedIn} />
@@ -35,7 +41,10 @@ function App() {
           }
         />
         <Route path="/signin" element={<LoginForm login={login} />} />
-        <Route path="/signup" element={<RegistrationForm />} />
+        <Route
+          path="/signup"
+          element={<RegistrationForm registerAndLogin={registerAndLogin} />}
+        />
         <Route path="/logout" element={<Logout logout={logout} />} />
       </Routes>
     </BrowserRouter>
