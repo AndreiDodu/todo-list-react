@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import classes from './app.module.css';
+import classes from '../app.module.css';
 
 class MainMenu extends Component {
   gotoSignUp = (e) => {

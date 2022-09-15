@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import TodoPage from './todo';
-import MainMenu from './mainMenu';
-import Protected from './protected';
-import LoginForm from './loginForm';
-import Logout from './logout';
-import RegistrationForm from './registrationForm';
+import TodoPage from './todo/todo';
+import MainMenu from './common/mainMenu';
+import Protected from './security/protected';
+import LoginForm from './user/loginForm';
+import Logout from './user/logout';
+import RegistrationForm from './user/registrationForm';
 import { useState } from 'react';
 
 function App() {

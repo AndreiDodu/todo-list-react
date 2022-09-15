@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import classes from '../app.module.css';
 
 class Logout extends Component {
   constructor(props) {
@@ -7,7 +8,11 @@ class Logout extends Component {
   }
 
   render() {
-    return <div>You have successfully logged out</div>;
+    return (
+      <div className={classes.textCenter + ' ' + classes.padding1}>
+        You have successfully logged out
+      </div>
+    );
   }
 }
 

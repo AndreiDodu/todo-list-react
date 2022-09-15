@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Navigate } from 'react-router-dom';
-import classes from './app.module.css';
+import classes from '../app.module.css';
 
 class RegistrationForm extends Component {
   constructor(props) {

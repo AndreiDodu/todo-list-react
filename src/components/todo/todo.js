@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Todo from './todoItem';
 import InsertForm from './insertForm';
 import Preview from './preview';
-import * as TodoService from '../service/todoService';
+import * as TodoService from '../../service/todoService';
 import Filter from './filter';
 
 class App extends Component {

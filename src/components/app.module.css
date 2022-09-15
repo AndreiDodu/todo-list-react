@@ -36,3 +36,13 @@ input.error {
 .authentication{
     text-align:right;
 }
+
+
+.textCenter {
+    text-align: center;
+ 
+}
+
+.padding1 {
+    padding: 5px;
+}
