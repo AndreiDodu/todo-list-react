@@ -33,8 +33,9 @@ class RegistrationForm extends Component {
 
     console.log(isFormValid, elements);
     if (isFormValid) {
-      this.props.registerAndLogin(this.packageThem(elements));
-      this.setState({ continue: true });
+      this.props.registerAndLogin(this.packageThem(elements)).then((result) => {
+        this.setState({ continue: true });
+      });
     } else {
       let status = {};
       elements.forEach((item) => {

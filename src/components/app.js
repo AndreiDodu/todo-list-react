@@ -6,12 +6,19 @@ import LoginForm from './user/loginForm';
 import Logout from './user/logout';
 import RegistrationForm from './user/registrationForm';
 import { useState } from 'react';
+import { register, loginUser, me } from '../service/userService';
 
 function App() {
   const [user, setUser] = useState({});
+  const [jwt, setJwt] = useState('');
 
   function login(user) {
-    setUser(user);
+    return loginUser(user).then((data) => {
+      setJwt(data.jwt);
+      return me(data.jwt).then((data) => {
+        setUser(data);
+      });
+    });
   }
 
   function isLoggedIn() {
@@ -23,9 +30,12 @@ function App() {
   }
 
   function registerAndLogin(regForm) {
-    // register
-    // login
-    setUser({ username: regForm.username });
+    return register(regForm).then((data) => {
+      setJwt(data.jwt);
+      return me(data.jwt).then((data) => {
+        setUser(data);
+      });
+    });
   }
 
   return (
@@ -36,7 +46,7 @@ function App() {
           path="/todo"
           element={
             <Protected isLoggedIn={isLoggedIn}>
-              <TodoPage />
+              <TodoPage jwt={jwt} />
             </Protected>
           }
         />

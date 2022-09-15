@@ -22,12 +22,14 @@ class LoginForm extends Component {
     const password = e.target.elements.password.value;
 
     if (this.isValidValue(username) && this.isValidValue(password)) {
-      this.props.login({
-        username: this.state.username,
-        password: this.state.password,
-      });
-
-      this.setState({ continue: true });
+      this.props
+        .login({
+          username: this.state.username,
+          password: this.state.password,
+        })
+        .then((result) => {
+          this.setState({ continue: true });
+        });
     } else {
       this.validateFormAndUpdateState(
         ['username', 'password'],

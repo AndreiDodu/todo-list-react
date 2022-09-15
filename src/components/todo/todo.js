@@ -18,14 +18,16 @@ class App extends Component {
   }
 
   insert = (value) => {
-    TodoService.save({ value, data: new Date() }).then((saved) => {
-      const newList = [...this.state.items, saved];
-      this.setState({ items: newList, filtered: [...newList] });
-    });
+    TodoService.save(this.props.jwt, { value, data: new Date() }).then(
+      (saved) => {
+        const newList = [...this.state.items, saved];
+        this.setState({ items: newList, filtered: [...newList] });
+      }
+    );
   };
 
   remove = (item) => {
-    TodoService.deleteItem(item._id).then((deleted) => {
+    TodoService.deleteItem(this.props.jwt, item._id).then((deleted) => {
       const newList = this.state.items.filter((todo) => todo._id !== item._id);
       this.setState({ items: newList, filtered: [...newList] });
     });
@@ -33,7 +35,7 @@ class App extends Component {
 
   update = (item) => {
     console.log('item', item);
-    TodoService.update(item._id, item).then((data) => {
+    TodoService.update(this.props.jwt, item._id, item).then((data) => {
       const newList = this.state.items.map((data) =>
         data._id !== item._id ? data : item
       );
@@ -54,7 +56,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    TodoService.getAll().then((lst) => {
+    TodoService.getAll(this.props.jwt).then((lst) => {
       this.setState({ items: [...lst], filtered: [...lst] });
     });
   }
