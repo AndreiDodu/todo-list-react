@@ -1,0 +1,38 @@
+span.error {
+    color: white;
+    padding: 2px 4px;
+    margin-left: 4px;
+    background-color: red;
+}
+
+input.error {
+    background-color: rgb(254, 209, 209)!important;
+}
+
+.mainmenu {
+    background-color: rgb(37, 31, 31);
+}
+
+.mainmenu a {
+    color: white; 
+
+    text-decoration: none;
+    margin: 0;
+    padding: 0 5px;
+}
+
+.mainmenu a:hover {
+    background-color: royalblue;
+}
+
+.username {
+    background-color: lime;
+    padding: 3px;
+    border-bottom-left-radius: 15%;
+    border-bottom-right-radius: 15%;
+}
+
+
+.authentication{
+    text-align:right;
+}
